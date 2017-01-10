@@ -1,0 +1,12 @@
+Tutorial For MCP3008 ADC 
+https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/mcp3008
+
+Tutorial for WS2801 lights with pi
+http://andypi.co.uk/2014/12/27/raspberry-pi-controlled-ws2801-rgb-leds/
+Github location for code: https://github.com/andy-pi/pixellights
+
+Actual Working Code For Nuit Blanche Project:
+SymphonieLumineuse/sensorAndLightsLargeRange.py = Reading IR Sensor Value from 100-600 to create a diferent hue.  Needs to be smoothed and change so there is different colour schemes
+SymphonieLumineuse/demo.py = Simple demo going through a Color Wheel. This part of the code (with parts added) will be used to every 15 minutes.
+
+
