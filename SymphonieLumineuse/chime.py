@@ -104,10 +104,10 @@ class AndyPiPixelLights:
 #   theGreen = int(sys.argv[2])
 #   theBlue  = int(sys.argv[3])
    try:  
-     while True:
+     for i in range(0,1 ):
         self.rainbowRoad(self.ledpixels, 0.05)
  #   self.colorwipe(self.ledpixels, self.Color(theRed, theGreen, theBlue), 0.05)
-#    self.cls(self.ledpixels)
+     self.cls(self.ledpixels)
    
    except KeyboardInterrupt:
         self.cls(self.ledpixels)

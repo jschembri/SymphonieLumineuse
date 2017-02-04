@@ -7,6 +7,19 @@
 # Hardware: WS2801 pixels, CLOCK=RPi23; Data=RPi19, GND=RpiGND, +5v=Rpi+5v
 
 import RPi.GPIO as GPIO, time, os, sys
+import pygame, threading
+import time
+from random import randint
+
+def foo():
+   file = '/home/pi/Downloads/japan.wav'
+   pygame.init()
+   pygame.mixer.init()
+   pygame.mixer.music.load(file)
+   pygame.mixer.music.play()
+   while pygame.mixer.music.get_busy():
+      pygame.time.Clock().tick(10)
+
 
 class AndyPiPixelLights:
 
@@ -43,52 +56,48 @@ class AndyPiPixelLights:
 		spidev.write(chr((pixels[i]>>8) & 0xFF))
 		spidev.write(chr(pixels[i] & 0xFF))
 	spidev.close()
-	time.sleep(0.002)
 
  def Color(self, r, g, b):
 	return ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF)
 
  def setpixelcolor(self, pixels, n, r, g, b):
-	if (n >= len(pixels)):
-		return
-	pixels[n] = self.Color(r,g,b)
+        if (n >= len(pixels)):
+                return
+        pixels[n] = self.Color(r,g,b)
 
  def setpixelcolor(self, pixels, n, c):
-	if (n >= len(pixels)):
-		return
-	pixels[n] = c
+        if (n >= len(pixels)):
+                return
+        pixels[n] = c
 
  def colorwipe(self, pixels, c, delay):
-	for i in range(len(pixels)):
-		self.setpixelcolor(pixels, i, c)
-		self.writestrip(pixels)
-		time.sleep(delay)		
+        for i in range(len(pixels)):
+                self.setpixelcolor(pixels, i, c)
+                self.writestrip(pixels)
+                time.sleep(delay)
+
 
  def Wheel(self, WheelPos):
-	if (WheelPos < 85):
-   		return self.Color(WheelPos * 3, 255 - WheelPos * 3, 0)
-	elif (WheelPos < 170):
-   		WheelPos -= 85;
-   		return self.Color(255 - WheelPos * 3, 0, WheelPos * 3)
-	else:
-		WheelPos -= 170;
-		return self.Color(0, WheelPos * 3, 255 - WheelPos * 3)
+        if (WheelPos < 85):
+                return self.Color(WheelPos * 3, 255 - WheelPos * 3, 0)
+        elif (WheelPos < 170):
+                WheelPos -= 85;
+                return self.Color(255 - WheelPos * 3, 0, WheelPos * 3)
+        else:
+                WheelPos -= 170;
+                return self.Color(0, WheelPos * 3, 255 - WheelPos * 3)
 
- def rainbowCycle(self, pixels, wait):
+
+ def rainbowRoad(self, pixels, wait, theR, theG, theB):
 	for j in range(256): # one cycle of all 256 colors in the wheel
     	   for i in range(len(pixels)):
- # tricky math! we use each pixel as a fraction of the full 96-color wheel
- # (thats the i / strip.numPixels() part)
- # Then add in j which makes the colors go around per pixel
- # the % 96 is to make the wheel cycle around
-      		self.setpixelcolor(pixels, i, self.Wheel( ((i * 256 / len(pixels)) + j) % 256) )
+                self.setpixelcolor(pixels, i, self.Color(j*theR,j*theG,j*theB) )
 	   self.writestrip(pixels)
+           print j
 	   time.sleep(wait)
-
- def rainbowRoad(self, pixels, wait):
-	for j in range(256): # one cycle of all 256 colors in the wheel
+	for j in range(255,-1,-1): # one cycle of all 256 colors in the wheel
     	   for i in range(len(pixels)):
-      		self.setpixelcolor(pixels, i, self.Wheel(j ))
+                self.setpixelcolor(pixels, i, self.Color(j*theR,j*theG,j*theB ))
 	   self.writestrip(pixels)
            print j
 	   time.sleep(wait)
@@ -100,16 +109,21 @@ class AndyPiPixelLights:
 
 
  def main(self):
-#   theRed   = int(sys.argv[1])
-#   theGreen = int(sys.argv[2])
-#   theBlue  = int(sys.argv[3])
-   try:  
-     while True:
-        self.rainbowRoad(self.ledpixels, 0.05)
- #   self.colorwipe(self.ledpixels, self.Color(theRed, theGreen, theBlue), 0.05)
-#    self.cls(self.ledpixels)
+   theR = randint(0,1)
+   theG = randint(0,1)
+   theB = randint(0,1)
+   if theR + theG + theB == 0:
+      theR = 1
+   theHour = int( sys.argv[1] )
+   for m in range(theHour):
+      try:  
+        thr = threading.Thread(target=foo, args=(), kwargs={})
+        thr.start()
+        time.sleep(0.5)
+        self.rainbowRoad(self.ledpixels, 0.002, theR, theG, theB)
+        self.cls(self.ledpixels)
    
-   except KeyboardInterrupt:
+      except KeyboardInterrupt:
         self.cls(self.ledpixels)
         sys.exit(0)
 
