@@ -7,6 +7,7 @@
 # Hardware: WS2801 pixels, CLOCK=RPi23; Data=RPi19, GND=RpiGND, +5v=Rpi+5v
 
 import RPi.GPIO as GPIO, time, os, sys
+import random
 
 class AndyPiPixelLights:
 
@@ -92,6 +93,40 @@ class AndyPiPixelLights:
 	   self.writestrip(pixels)
            print j
 	   time.sleep(wait)
+
+ def flashColor(self, pixels, wait):
+        randomInt = random.randint(0,255)
+
+	for i in range(15):
+           for i in range(len(pixels)):
+              self.setpixelcolor(pixels, i, self.Wheel(randomInt ))
+	   self.writestrip(pixels)
+	   time.sleep(wait)
+	   self.cls(self.ledpixels)
+	   time.sleep(wait)
+
+ def flashColorFaster(self, pixels):
+        randomInt = random.randint(0,255)
+	wait = 1.0
+	for i in range(10):
+           for i in range(len(pixels)):
+              self.setpixelcolor(pixels, i, self.Wheel(randomInt ))
+	   self.writestrip(pixels)
+	   time.sleep(wait)
+	   self.cls(self.ledpixels)
+	   time.sleep(wait)
+           wait = wait - 0.09
+	for i in range(10):
+           for i in range(len(pixels)):
+              self.setpixelcolor(pixels, i, self.Wheel(randomInt ))
+	   self.writestrip(pixels)
+	   time.sleep(wait)
+	   self.cls(self.ledpixels)
+	   time.sleep(wait)
+           wait = wait + 0.09
+ def oneMovingDot(self, pixels, wait):
+   for i in range(1, self.ledpixels):
+      print i
  
  def cls(self, pixels):
           for i in range(len(pixels)):
@@ -100,12 +135,14 @@ class AndyPiPixelLights:
 
 
  def main(self):
-#   theRed   = int(sys.argv[1])
-#   theGreen = int(sys.argv[2])
-#   theBlue  = int(sys.argv[3])
+   randomInt = random.randint(0,255)
    try:  
-     self.rainbowRoad(self.ledpixels, 0.05)
- #   self.colorwipe(self.ledpixels, self.Color(theRed, theGreen, theBlue), 0.05)
+     if randomInt == 0:
+        self.rainbowRoad(self.ledpixels, 0.05)
+     elif randomInt == 1:
+        self.flashColor(self.ledpixels, 0.5)
+     else:
+        self.flashColorFaster(self.ledpixels)
      self.cls(self.ledpixels)
    
    except KeyboardInterrupt:
