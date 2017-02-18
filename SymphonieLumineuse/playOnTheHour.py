@@ -13,12 +13,13 @@ from random import randint
 
 def foo():
    file = '/home/pi/Downloads/japan.wav'
-   pygame.init()
-   pygame.mixer.init()
-   pygame.mixer.music.load(file)
-   pygame.mixer.music.play()
-   while pygame.mixer.music.get_busy():
-      pygame.time.Clock().tick(10)
+   if file.isfile():
+      pygame.init()
+      pygame.mixer.init()
+      pygame.mixer.music.load(file)
+      pygame.mixer.music.play()
+      while pygame.mixer.music.get_busy():
+         pygame.time.Clock().tick(10)
 
 
 class AndyPiPixelLights:
@@ -109,13 +110,16 @@ class AndyPiPixelLights:
 
 
  def main(self):
+   if len(sys.argv) > 1:
+      theHour = int(sys.argv[1])
+   else:
+      theHour = 1
+
    theR = randint(0,1)
    theG = randint(0,1)
    theB = randint(0,1)
    if theR + theG + theB == 0:
       theR = 1
-   theHour = int( sys.argv[1] )
-#   print theR, theG, theB
    for m in range(theHour):
       try:  
         thr = threading.Thread(target=foo, args=(), kwargs={})

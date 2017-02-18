@@ -196,14 +196,21 @@ class AndyPiPixelLights:
 
 
  def main(self):
-    self.startUp(self.ledpixels)
-    self.flashColorFasterComp(self.ledpixels)
-    self.rainbowRoad(self.ledpixels, 0.05)
-    self.flashColorFaster(self.ledpixels)
-    self.flashColorFasterComp(self.ledpixels)
-    self.finishUp(self.ledpixels)
-    self.rainbowCycle(self.ledpixels, 0.05)
-    self.startUpBong(self.ledpixels)
+    try:
+       self.startUp(self.ledpixels)
+       #self.flashColorFasterComp(self.ledpixels)
+       #self.rainbowRoad(self.ledpixels, 0.05)
+       #self.flashColorFaster(self.ledpixels)
+       #self.flashColorFasterComp(self.ledpixels)
+       #self.finishUp(self.ledpixels)
+       #self.rainbowCycle(self.ledpixels, 0.05)
+       #self.startUpBong(self.ledpixels)
+    except KeyboardInterrupt:
+       self.cls(self.ledpixels)
+       sys.exit(0)
+    except:
+       self.cls(self.ledpixels)
+       sys.exit(0)
 
 #   randomInt = random.randint(0,255)
 #   try:  
