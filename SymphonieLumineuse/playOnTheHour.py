@@ -115,6 +115,7 @@ class AndyPiPixelLights:
    if theR + theG + theB == 0:
       theR = 1
    theHour = int( sys.argv[1] )
+#   print theR, theG, theB
    for m in range(theHour):
       try:  
         thr = threading.Thread(target=foo, args=(), kwargs={})

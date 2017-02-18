@@ -86,6 +86,19 @@ class AndyPiPixelLights:
 	   self.writestrip(pixels)
 	   time.sleep(wait)
 
+ def startUpBong(self, pixels):
+    randomInt = random.randint(0,255)
+    wait = 0.2
+    for i in range(0,len(pixels)+0):
+       self.setpixelcolor(pixels, i % 25, self.Wheel(randomInt ) )
+       self.setpixelcolor(pixels, (i+10) % 25, self.Wheel(randomInt ) )
+       self.writestrip(pixels)
+       time.sleep(wait)
+       self.setpixelcolor(pixels, i%25, self.Color(0,0,0)  )
+       self.setpixelcolor(pixels, (i+10) % 25, self.Color(0,0,0) )
+       self.writestrip(pixels)
+
+
  def rainbowRoad(self, pixels, wait):
 	for j in range(256): # one cycle of all 256 colors in the wheel
     	   for i in range(len(pixels)):
@@ -93,6 +106,13 @@ class AndyPiPixelLights:
 	   self.writestrip(pixels)
            print j
 	   time.sleep(wait)
+
+ def writeString(self, pixels, c):
+    for i in range(len(pixels)):
+       self.setpixelcolor(pixels, i, c)
+    self.writestrip(pixels)
+
+
 
  def flashColor(self, pixels, wait):
         randomInt = random.randint(0,255)
@@ -124,9 +144,50 @@ class AndyPiPixelLights:
 	   self.cls(self.ledpixels)
 	   time.sleep(wait)
            wait = wait + 0.09
+
+ def flashColorFasterComp(self, pixels):
+        randomInt = random.randint(0,255)
+	randomIntComp = (randomInt-128) % 255
+	wait = 1.0
+	for i in range(10):
+           self.writeString(self.ledpixels, self.Wheel(randomInt ))
+	   time.sleep(wait)
+           self.writeString(self.ledpixels, self.Wheel(randomIntComp ))
+	   time.sleep(wait)
+           wait = wait - 0.09
+	for i in range(10):
+           self.writeString(self.ledpixels, self.Wheel(randomInt ))
+	   time.sleep(wait)
+           self.writeString(self.ledpixels, self.Wheel(randomIntComp ))
+	   time.sleep(wait)
+           wait = wait + 0.09
+
  def oneMovingDot(self, pixels, wait):
    for i in range(1, self.ledpixels):
       print i
+ def startUp(self, pixels):
+   wait = 0.01
+   for i in range(0,255):
+      self.writeString(self.ledpixels, self.Color(i, 0, 0))
+      time.sleep(wait)
+   for i in range(0,255):
+      self.writeString(self.ledpixels, self.Color(0, i, 0))
+      time.sleep(wait)
+   for i in range(0,255):
+      self.writeString(self.ledpixels, self.Color(0, 0, i))
+      time.sleep(wait)
+ def finishUp(self, pixels):
+   wait = 0.01
+   for i in range(255,0,-1):
+      self.writeString(self.ledpixels, self.Color(i, 0, 0))
+      time.sleep(wait)
+   for i in range(255, 0, -1):
+      self.writeString(self.ledpixels, self.Color(0, i, 0))
+      time.sleep(wait)
+   for i in range(255,0, -1):
+      self.writeString(self.ledpixels, self.Color(0, 0, i))
+      time.sleep(wait)
+
  
  def cls(self, pixels):
           for i in range(len(pixels)):
@@ -135,19 +196,28 @@ class AndyPiPixelLights:
 
 
  def main(self):
-   randomInt = random.randint(0,255)
-   try:  
-     if randomInt == 0:
-        self.rainbowRoad(self.ledpixels, 0.05)
-     elif randomInt == 1:
-        self.flashColor(self.ledpixels, 0.5)
-     else:
-        self.flashColorFaster(self.ledpixels)
-     self.cls(self.ledpixels)
+    self.startUp(self.ledpixels)
+    self.flashColorFasterComp(self.ledpixels)
+    self.rainbowRoad(self.ledpixels, 0.05)
+    self.flashColorFaster(self.ledpixels)
+    self.flashColorFasterComp(self.ledpixels)
+    self.finishUp(self.ledpixels)
+    self.rainbowCycle(self.ledpixels, 0.05)
+    self.startUpBong(self.ledpixels)
+
+#   randomInt = random.randint(0,255)
+#   try:  
+#     if randomInt == 0:
+#        self.rainbowRoad(self.ledpixels, 0.05)
+#     elif randomInt == 1:
+#        self.flashColor(self.ledpixels, 0.5)
+#     else:
+#        self.flashColorFaster(self.ledpixels)
+    self.cls(self.ledpixels)
    
-   except KeyboardInterrupt:
-        self.cls(self.ledpixels)
-        sys.exit(0)
+#    except KeyboardInterrupt:
+#        self.cls(self.ledpixels)
+#        sys.exit(0)
 
 
 
