@@ -13,7 +13,7 @@ from random import randint
 
 def foo():
    file = '/home/pi/Downloads/japan.wav'
-   if file.isfile():
+   if os.path.isfile(file):
       pygame.init()
       pygame.mixer.init()
       pygame.mixer.music.load(file)
