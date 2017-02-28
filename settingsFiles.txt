@@ -1,0 +1,12 @@
+dtoverlay=spi1-1cs /boot/config
+dtparam=i2c_arm=on
+dtparam=spi=on
+
+sudo npm install -g mcp3008
+sudo npm install -g natcl/node-red-contrib-rpi-ws2801
+overscan_left=150
+overscan_right=150
+overscan_top=30
+overscan_bottom=30
+
+
